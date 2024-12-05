@@ -140,3 +140,12 @@ storage_data/
 
 # inner data
 .data/**
+
+# tools
+tools/resources/**
+
+# examples
+examples/static_theme_convert/resources/**
+
+# vscode
+.vscode
