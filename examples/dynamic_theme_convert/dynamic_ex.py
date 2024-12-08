@@ -2,8 +2,8 @@ import sys
 from pathlib import Path
 
 from PySide6.QtCore import QFile, Qt
-from PySide6.QtGui import QAction, QActionGroup
 from PySide6.QtUiTools import QUiLoader
+from PySide6.QtGui import QAction, QActionGroup
 from PySide6.QtWidgets import QApplication, QMainWindow
 
 from qt_stylehelper import DynamicQtStyleTools as QtStyleTools

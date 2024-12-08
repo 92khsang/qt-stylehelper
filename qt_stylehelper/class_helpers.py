@@ -81,37 +81,25 @@ def require_init(func):
 
 def require_init_for_all_methods(cls):
     """
-    A class decorator that applies the `require_init` decorator to all callable
-    attributes of a class, including static methods and class methods.
+    A class decorator that applies the @require_init decorator to all callable
+    attributes of the class and its base classes.
 
-    This decorator walks the MRO of the class and applies the `require_init`
-    decorator to all callable attributes that are not special methods (i.e.,
-    methods with names that start with double underscore).
+    The @require_init decorator ensures that the decorated function is only
+    executed if the class instance has been initialized, i.e., an attribute
+    "_init" is set to True.
 
     Args:
         cls: The class to be decorated.
 
     Returns:
         The decorated class.
-
     """
     for base_cls in cls.__mro__:
         for attr_name, attr_value in base_cls.__dict__.items():
-            print(f"Processing {attr_name}: {type(attr_value)}")  # Debugging output
-
-            if attr_name.startswith("__"):
+            if attr_name.startswith("__") or isinstance(attr_value, (staticmethod, classmethod)):
                 continue
 
-            if isinstance(attr_value, staticmethod):
-                print(f"Wrapping staticmethod: {attr_name}")
-                original_func = attr_value.__func__
-                setattr(cls, attr_name, staticmethod(require_init(original_func)))
-            elif isinstance(attr_value, classmethod):
-                print(f"Wrapping classmethod: {attr_name}")
-                original_func = attr_value.__func__
-                setattr(cls, attr_name, classmethod(require_init(original_func)))
-            elif callable(attr_value):
-                print(f"Wrapping instance method: {attr_name}")
+            if callable(attr_value):
                 setattr(cls, attr_name, require_init(attr_value))
 
     return cls
@@ -144,15 +132,13 @@ def override(func):
 
 class RequireInitMeta(ABCMeta):
     def __new__(cls, name, bases, dct):
-        # Wrap all methods with `require_init`
         for attr_name, attr_value in dct.items():
             if (
-                callable(attr_value)  # Only target callable attributes
-                and not attr_name.startswith("__")  # Skip special methods
+                callable(attr_value)
+                and not attr_name.startswith("__")
                 and not isinstance(
                     attr_value, (staticmethod, classmethod)
-                )  # Skip static/class methods
+                ) 
             ):
                 dct[attr_name] = require_init(attr_value)
-        # Create the class using ABCMeta's logic
         return super().__new__(cls, name, bases, dct)
