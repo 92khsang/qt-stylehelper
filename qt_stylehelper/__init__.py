@@ -179,12 +179,27 @@ class QtStyleTools(metaclass=ABCMeta):
         if theme_name == "default":
             self._apply_default(widget)
         else:
-            stylesheet = self._get_stylesheet(theme_name)
-            QtHandler.add_search_paths(resource_dir=self._get_icons_dir(theme_name))
-            QtHandler.apply_palette(self._get_theme_object(theme_name))
-            QtHandler.apply_stylesheet(widget, stylesheet)
+            self._update_qt(widget, theme_name)
 
         self._current_theme = theme_name
+
+    def refresh_stylesheet(self, widget: QWidget) -> None:
+        """
+        Refreshes the stylesheet of the given widget to the current theme.
+
+        Args:
+            widget (QWidget): The widget to refresh the stylesheet for.
+        """
+        if self._current_theme == "default":
+            return
+
+        self._update_qt(widget, self._current_theme)
+
+    def _update_qt(self, widget: QWidget, theme_name: str) -> None:
+        stylesheet = self._get_stylesheet(theme_name)
+        QtHandler.add_search_paths(resource_dir=self._get_icons_dir(theme_name))
+        QtHandler.apply_palette(self._get_theme_object(theme_name))
+        QtHandler.apply_stylesheet(widget, stylesheet)
 
     @staticmethod
     def _apply_default(widget: QWidget) -> None:

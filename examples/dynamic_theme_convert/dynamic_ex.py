@@ -8,7 +8,6 @@ from PySide6.QtWidgets import QApplication, QMainWindow
 
 from qt_stylehelper import DynamicQtStyleTools as QtStyleTools
 
-
 class MainWindow(QMainWindow):
 	def __init__(self):
 		super().__init__()
@@ -27,9 +26,24 @@ class MainWindow(QMainWindow):
 		for style_name in self.style_tools.get_theme_list():
 			action = QAction(style_name, style_action_group)
 			action.triggered.connect(
-				lambda checked, style_name=style_name: self.style_tools.apply_stylesheet(self, style_name)
+				lambda checked, style=style_name: self.style_tools.apply_stylesheet(self, style)
 			)
 			style_menu.addAction(action)
+		
+		density_menu = menu_bar.addMenu("Densities")
+		density_action_group = QActionGroup(density_menu)
+		density_action_group.setExclusive(True)
+
+		def update_densities(density_scale):
+			self.style_tools.set_extra({"density_scale": density_scale})
+			self.style_tools.refresh_stylesheet(self)
+
+		for density in range(-2, 3):
+			action = QAction(str(density), density_action_group)
+			action.triggered.connect(
+				lambda checked, density_scale=density: update_densities(density_scale)
+			)
+			density_menu.addAction(action)
 
 	def load_ui_file(self, file_path: Path):
 		"""Load a .ui file and return the corresponding QWidget."""
