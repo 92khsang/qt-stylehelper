@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- QtMaterial - https://github.com/UN-GCPDS/qt-material -->
+<!-- By Yeison Cardona - GCPDS -->
+<ui version="4.0">
+    <widget class="QDockWidget" name="dockWidget_6">
+        <property name="windowTitle">
+            <string>Top Dock</string>
+        </property>
+        <attribute name="dockWidgetArea">
+            <number>2</number>
+        </attribute>
+        <widget class="QWidget" name="dockWidgetContents_5">
+            <layout class="QGridLayout" name="gridLayout_20">
+                <item row="0" column="0">
+                    <widget class="QListWidget" name="listWidget">
+                        <item>
+                            <property name="text">
+                                <string>New Item (editable)</string>
+                            </property>
+                            <property name="checkState">
+                                <enum>Checked</enum>
+                            </property>
+                            <property name="flags">
+                                <set>
+                                    ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>New Item</string>
+                            </property>
+                            <property name="checkState">
+                                <enum>Unchecked</enum>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>New Item</string>
+                            </property>
+                            <property name="checkState">
+                                <enum>PartiallyChecked</enum>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>New Item</string>
+                            </property>
+                            <property name="checkState">
+                                <enum>Checked</enum>
+                            </property>
+                            <property name="flags">
+                                <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsUserCheckable</set>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>New Item</string>
+                            </property>
+                            <property name="checkState">
+                                <enum>Unchecked</enum>
+                            </property>
+                            <property name="flags">
+                                <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsUserCheckable</set>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>New Item</string>
+                            </property>
+                            <property name="checkState">
+                                <enum>PartiallyChecked</enum>
+                            </property>
+                            <property name="flags">
+                                <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsUserCheckable</set>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>New Item</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>New Item</string>
+                            </property>
+                            <property name="flags">
+                                <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsUserCheckable</set>
+                            </property>
+                        </item>
+                    </widget>
+                </item>
+            </layout>
+        </widget>
+    </widget>
+</ui>
