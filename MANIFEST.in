@@ -1,0 +1,4 @@
+include qt_stylehelper/*.jinja2
+include qt_stylehelper/themes/*.json
+recursive-include qt_stylehelper/resources *.svg
+exclude tests/*
