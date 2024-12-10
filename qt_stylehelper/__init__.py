@@ -7,16 +7,13 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Union
 
-if "PySide6" in sys.modules:
-    from ._qt import QtHandler
-    from PySide6.QtWidgets import QWidget
-else:
-    from ._mock_qt import (
-        MockQt as QWidget,
-        MockQt as QtHandler,
-        MockQt
-    )
-
+from ._qt import QtHandler
+from ._stylesheet import (
+    DEFAULT_TEMPLATE_FILE,
+    ICON_URL_PREFIX,
+    StyleSheetExporter,
+    StyleSheetRenderer,
+)
 from ._theme import ThemeManager
 from ._utils import (
     get_platform_resource_dir_path,
@@ -24,20 +21,14 @@ from ._utils import (
     is_valid_filename,
     validate_dir_path,
 )
-from .value_object import Theme, ExtraAttributes
-from .icon import BuiltInIconGenerator, BuiltInIconDirValidator
-from ._stylesheet import (
-    StyleSheetRenderer,
-    StyleSheetExporter,
-    DEFAULT_TEMPLATE_FILE,
-    ICON_URL_PREFIX,
-)
-from .class_helpers import (
-    override,
-    require_qt_for_all_methods,
-    require_init_for_all_methods,
-)
+from .class_helpers import (override, require_init_for_all_methods, require_qt_for_all_methods)
+from .icon import BuiltInIconDirValidator, BuiltInIconGenerator
+from .value_object import ExtraAttributes, Theme
 
+if "PySide6" in sys.modules:
+    from PySide6.QtWidgets import QWidget
+else:
+    from ._mock_qt import MockQt, MockQt as QWidget
 
 # ----------------------------------------------------------------------
 # Class to generate static built-in resources
@@ -167,7 +158,7 @@ class QtStyleTools(metaclass=ABCMeta):
         self._current_theme = "default"
         self._init = False
 
-    def apply_stylesheet(self, widget: QWidget, theme_name: str) -> None:
+    def apply_stylesheet(self, widget, theme_name: str) -> None:
         """
         Applies a stylesheet to the given widget.
 
@@ -198,26 +189,29 @@ class QtStyleTools(metaclass=ABCMeta):
 
         self._current_theme = theme_name
 
-    def refresh_stylesheet(self, widget: QWidget) -> None:
+    def refresh_stylesheet(self, widget) -> None:
         """
         Refreshes the stylesheet of the given widget to the current theme.
 
         Args:
             widget (QWidget): The widget to refresh the stylesheet for.
         """
+        if not isinstance(widget, QWidget):
+            raise ValueError("Widget must be a valid QWidget instance.")
+
         if self._current_theme == "default":
             return
 
         self._update_qt(widget, self._current_theme)
 
-    def _update_qt(self, widget: QWidget, theme_name: str) -> None:
+    def _update_qt(self, widget, theme_name: str) -> None:
         stylesheet = self._get_stylesheet(theme_name)
         QtHandler.add_search_paths(resource_dir=self._get_icons_dir(theme_name))
         QtHandler.apply_palette(self._get_theme_object(theme_name))
         QtHandler.apply_stylesheet(widget, stylesheet)
 
     @staticmethod
-    def _apply_default(widget: QWidget) -> None:
+    def _apply_default(widget) -> None:
         """
         Applies the default stylesheet to the given widget.
 

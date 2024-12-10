@@ -30,7 +30,6 @@ class MainWindow(QMainWindow):
 
 		for style_name in self.style_tools.get_theme_list():
 			action = QAction(style_name, style_action_group)
-			# noinspection PyTypeChecker
 			action.triggered.connect(
 				lambda checked, style=style_name: self.style_tools.apply_stylesheet(self, style)
 			)
@@ -42,7 +41,6 @@ class MainWindow(QMainWindow):
 
 		def update_densities(density_scale):
 			self.style_tools.set_extra({"density_scale": density_scale})
-			# noinspection PyTypeChecker
 			self.style_tools.refresh_stylesheet(self)
 
 		for density in range(-2, 3):

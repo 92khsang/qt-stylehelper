@@ -1,17 +1,9 @@
-import sys
 import unittest
 from pathlib import Path
 from unittest.mock import MagicMock, mock_open, patch
 
-from qt_stylehelper import StaticQtStyleTools, StaticThemeDirectoryStructure
+from qt_stylehelper import QWidget, StaticQtStyleTools, StaticThemeDirectoryStructure
 from qt_stylehelper.value_object import Theme
-
-if "PySide6" in sys.modules:
-	from PySide6.QtWidgets import QWidget
-else:
-	from qt_stylehelper import (
-		MockQt as QWidget,
-	)
 
 
 class TestStaticQtStyleTools(unittest.TestCase):
@@ -67,7 +59,6 @@ class TestStaticQtStyleTools(unittest.TestCase):
 			self.style_tools._init = True
 			self.style_tools.get_theme_list = MagicMock(return_value=["default", "dark"])
 			with self.assertRaises(ValueError):
-				# noinspection PyTypeChecker
 				self.style_tools.apply_stylesheet(None, "nonexistent_theme")
 
 
@@ -208,7 +199,7 @@ class TestStaticQtStyleTools(unittest.TestCase):
 			self.fail("_verify_unique_theme_names raised ValueError unexpectedly.")
 
 	@patch("qt_stylehelper.QtHandler")
-	def test_apply_stylesheet_same_theme(self, MockQtHandler):
+	def test_apply_stylesheet_same_theme(self, mock_qt_handler):
 		"""Test applying the same theme does nothing."""
 		with patch("sys.modules", {"PySide6": MagicMock()}):
 			self.style_tools._init = True
@@ -220,7 +211,7 @@ class TestStaticQtStyleTools(unittest.TestCase):
 			self.style_tools.apply_stylesheet(widget_mock, "dark")
 
 			# Ensure no operations were performed
-			MockQtHandler.apply_stylesheet.assert_not_called()
+			mock_qt_handler.apply_stylesheet.assert_not_called()
 
 	def test_generate_regex_for_theme_values_complex(self):
 		"""Test regex generation with complex theme values."""
