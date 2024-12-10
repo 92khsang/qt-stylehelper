@@ -12,9 +12,10 @@ os.chdir(
 
 setup(
 	name='qt-stylehelper',
-	version='0.1',
+	version='0.1.1',
 	packages=[
 		'qt_stylehelper',
+		'qt_stylehelper.themes',
 		'qt_stylehelper.resources',
 		'qt_stylehelper.resources.icons',
 	],

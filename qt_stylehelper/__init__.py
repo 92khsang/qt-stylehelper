@@ -1,10 +1,10 @@
-import re
-import sys
 import json
 import logging
-from pathlib import Path
+import re
+import sys
 from abc import ABCMeta, abstractmethod
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Dict, List, Optional, Union
 
 if "PySide6" in sys.modules:
@@ -12,15 +12,26 @@ if "PySide6" in sys.modules:
     from PySide6.QtWidgets import QWidget
 else:
     from ._mock_qt import (
-        MockQWidget as QWidget,
-        MockQtHandler as QtHandler,
+        MockQt as QWidget,
+        MockQt as QtHandler,
+        MockQt
     )
 
 from ._theme import ThemeManager
-from ._utils import validate_dir_path
+from ._utils import (
+    get_platform_resource_dir_path,
+    is_valid_6_digit_hex_color,
+    is_valid_filename,
+    validate_dir_path,
+)
 from .value_object import Theme, ExtraAttributes
 from .icon import BuiltInIconGenerator, BuiltInIconDirValidator
-from ._stylesheet import StyleSheetRenderer, StyleSheetExporter, DEFAULT_TEMPLATE_FILE
+from ._stylesheet import (
+    StyleSheetRenderer,
+    StyleSheetExporter,
+    DEFAULT_TEMPLATE_FILE,
+    ICON_URL_PREFIX,
+)
 from .class_helpers import (
     override,
     require_qt_for_all_methods,
@@ -119,6 +130,7 @@ class StaticBuiltInResourceGenerator:
         )
 
         with open(destination_dir_path / f"{theme_name}.json", "w") as file:
+            # noinspection PyTypeChecker
             json.dump(theme_object.colors, file, indent=4)
 
     @staticmethod
@@ -162,6 +174,9 @@ class QtStyleTools(metaclass=ABCMeta):
         Args:
             widget (QWidget): The widget to apply the stylesheet to.
             theme_name (str): The name of the theme to apply.
+
+        Returns:
+            object: 
 
         Raises:
             ValueError: If the widget is not a valid QWidget instance.
@@ -253,7 +268,7 @@ class QtStyleTools(metaclass=ABCMeta):
         Returns the directory path for the icons associated with the given theme name.
 
         Args:
-            theme_name (str): The name of the theme for which to retrieve the icons directory.
+            theme_name (str): The name of the theme for which to retrieve the icons' directory.
 
         Returns:
             str: The path to the directory containing the icons for the specified theme.

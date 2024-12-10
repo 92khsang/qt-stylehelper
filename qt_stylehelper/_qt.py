@@ -1,9 +1,9 @@
-import sys
 import logging
+import sys
 from pathlib import Path
 
-from ._theme import Theme
 from ._stylesheet import ICON_PREFIX
+from ._theme import Theme
 from .class_helpers import require_qt, require_qt_for_all_methods
 
 if "PySide6" in sys.modules:
@@ -11,12 +11,13 @@ if "PySide6" in sys.modules:
     from PySide6.QtGui import QFontDatabase, QColor, QGuiApplication, QPalette
 else:
     from ._mock_qt import (
-        MockQDir as QDir,
-        MockQColor as QColor,
-        MockQPalette as QPalette,
-        MockQFontDatabase as QFontDatabase,
-        MockQGuiApplication as QGuiApplication,
+        MockQt as QDir,
+        MockQt as QFontDatabase,
+        MockQt as QColor,
+        MockQt as QGuiApplication,
+        MockQt as QPalette,
     )
+
 
     logging.warning(
         "If you intend to use code related to Qt, the corresponding Qt libraries are required."
@@ -33,8 +34,8 @@ class _QtFontDBHandler:
     Handles font operations like adding application fonts.
     """
 
-    @require_qt
     @staticmethod
+    @require_qt
     def add_fonts_from_directory(font_dir: str) -> None:
         """
         Adds fonts from the specified directory to the application.
@@ -76,19 +77,19 @@ class _QtStyleHandler:
     Handles operations related to Qt stylesheets.
     """
 
-    @require_qt
     @staticmethod
+    @require_qt
     def apply_style(app, style: str) -> None:
         try:
             try:
                 app.setStyle(style)
             except AttributeError:
                 app.style = style
-        except Exception:
-            logging.error(f"The style '{style}' does not exist.")
+        except Exception as e:
+            logging.error(f"The style '{style}' does not exist.", e)
 
-    @require_qt
     @staticmethod
+    @require_qt
     def apply_stylesheet(app, stylesheet: str) -> None:
         """
         Applies the provided stylesheet to the application.
@@ -110,10 +111,10 @@ class _QtStyleHandler:
         except AttributeError:
             app.styleSheet = stylesheet
         except Exception as e:
-            logging.error(f"Failed to apply stylesheet: {e}")
+            logging.error(f"Failed to apply stylesheet", e)
 
-    @require_qt
     @staticmethod
+    @require_qt
     def add_search_paths(resource_dir: str, icon_prefix: str = ICON_PREFIX) -> None:
         """
         Adds search paths for Qt resources.
@@ -159,8 +160,8 @@ class _QtPaletteHandler:
     Handles operations related to Qt palettes.
     """
 
-    @require_qt
     @staticmethod
+    @require_qt
     def apply_palette(theme: Theme) -> None:
         """
         Applies a color palette to the Qt application based on the provided theme.
@@ -177,7 +178,7 @@ class _QtPaletteHandler:
             logging.error(f"Theme does not contain the key '{primary_color_key}'.")
             return
 
-        primary_color = _QtPaletteHandler._hex_to_qcolor(
+        primary_color = _QtPaletteHandler._hex_to_qt_color(
             theme.colors[primary_color_key]
         )
         palette = QGuiApplication.palette()
@@ -195,7 +196,8 @@ class _QtPaletteHandler:
         except Exception as e:
             logging.error(f"Failed to apply palette: {e}")
 
-    def _hex_to_qcolor(hex_color: str, alpha: int = 92) -> QColor:
+    @staticmethod
+    def _hex_to_qt_color(hex_color: str, alpha: int = 92) -> QColor:
         """
         Converts a hexadecimal color string to a QColor object with an optional alpha value.
 

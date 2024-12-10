@@ -1,11 +1,16 @@
 import sys
-from typing import List
 from pathlib import Path
+from typing import List
 
-from PySide6.QtCore import QFile, Qt
-from PySide6.QtUiTools import QUiLoader
-from PySide6.QtGui import QAction, QActionGroup
-from PySide6.QtWidgets import QApplication, QMainWindow
+if "PySide6" in sys.modules:
+	from PySide6.QtCore import QFile, Qt
+	from PySide6.QtGui import QAction, QActionGroup
+	from PySide6.QtUiTools import QUiLoader
+	from PySide6.QtWidgets import QApplication, QMainWindow
+else:
+	raise Exception(
+		"If you intend to use code related to Qt, the corresponding Qt libraries are required."
+	)
 
 from qt_stylehelper import (
 	StaticBuiltInResourceGenerator,
@@ -42,8 +47,9 @@ class MainWindow(QMainWindow):
 
 		for style_name in self.style_tools.get_theme_list():
 			action = QAction(style_name, style_action_group)
+			# noinspection PyTypeChecker
 			action.triggered.connect(
-				lambda checked, style_name=style_name: self.style_tools.apply_stylesheet(self, style_name)
+				lambda checked, style=style_name: self.style_tools.apply_stylesheet(self, style)
 			)
 			style_menu.addAction(action)
 
@@ -56,6 +62,7 @@ class MainWindow(QMainWindow):
 		ui_file.close()
 		return widget
 
+	# noinspection PyTypeChecker
 	def load_widgets(self):
 		"""Load the central and toolbar widgets."""
 		base_path = Path(__file__).parent.parent / "ui"

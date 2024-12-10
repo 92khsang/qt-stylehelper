@@ -58,21 +58,6 @@ from qt_stylehelper import (
 	StaticQtStyleTools,
 )
 
-_RESOURCES_DIR = Path(__file__).parent.resolve() / "resources"
-
-def generate_static_theme(theme_names: List[str]):
-	for theme_name in theme_names:
-		StaticBuiltInResourceGenerator.generate(
-			theme_name,
-			destination_dir=str(_RESOURCES_DIR)
-		)
-
-theme_names = ["dark_amber", "light_cyan_500"]
-generate_static_theme(theme_names)
-
-# main window
-main_window = #
-
 static_tools = StaticQtStyleTools()
 static_tools.auto_init(str(_RESOURCES_DIR))
 static_tools.apply_stylesheet(main_window, "dark_amber")

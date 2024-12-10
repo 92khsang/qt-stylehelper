@@ -2,7 +2,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import mock_open, patch
 
-from qt_stylehelper._stylesheet import ICON_URL_PREFIX, StyleSheetExporter
+from qt_stylehelper import ICON_URL_PREFIX, StyleSheetExporter
 
 
 class TestStyleSheetExporter(unittest.TestCase):

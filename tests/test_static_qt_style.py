@@ -9,8 +9,8 @@ from qt_stylehelper.value_object import Theme
 if "PySide6" in sys.modules:
 	from PySide6.QtWidgets import QWidget
 else:
-	from qt_stylehelper._mock_qt import (
-		MockQWidget as QWidget,
+	from qt_stylehelper import (
+		MockQt as QWidget,
 	)
 
 
@@ -62,14 +62,14 @@ class TestStaticQtStyleTools(unittest.TestCase):
 
 	def test_apply_stylesheet_invalid_theme(self):
 		"""Test applying a stylesheet with an invalid theme."""
-		sys.modules["PySide6"] = object()
 
-		self.style_tools._init = True
-		self.style_tools.get_theme_list = MagicMock(return_value=["default", "dark"])
-		with self.assertRaises(ValueError):
-			self.style_tools.apply_stylesheet(None, "nonexistent_theme")
+		with patch("sys.modules", {"PySide6": MagicMock()}):
+			self.style_tools._init = True
+			self.style_tools.get_theme_list = MagicMock(return_value=["default", "dark"])
+			with self.assertRaises(ValueError):
+				# noinspection PyTypeChecker
+				self.style_tools.apply_stylesheet(None, "nonexistent_theme")
 
-		del sys.modules["PySide6"]
 
 	@patch("qt_stylehelper.QtHandler")
 	def test_apply_stylesheet_valid_theme(self, mock_qt_handler):
@@ -115,11 +115,13 @@ class TestStaticQtStyleTools(unittest.TestCase):
 			self.style_tools._init = False
 
 			with self.assertRaises(RuntimeError):
+				# noinspection PyTypeChecker
 				self.style_tools.apply_stylesheet(None, "default")
 
 			self.style_tools._init = True
 			with self.assertRaises(ValueError):
 				try:
+					# noinspection PyTypeChecker
 					self.style_tools.apply_stylesheet(None, "default")
 				except RuntimeError:
 					self.fail("apply_stylesheet() raised RuntimeError unexpectedly when initialized.")

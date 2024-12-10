@@ -5,7 +5,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-from qt_stylehelper._theme import ThemeManager
+from qt_stylehelper import ThemeManager
 from qt_stylehelper.value_object import Theme
 
 
@@ -36,7 +36,7 @@ class TestInitializeThemeManager(unittest.TestCase):
 @patch("qt_stylehelper._theme.validate_dir_path")
 class TestThemeManager(unittest.TestCase):
 	def setUp(self):
-		"""Setup a ThemeManager instance with a mock theme directory."""
+		"""Set up a ThemeManager instance with a mock theme directory."""
 		self.mock_theme_dir = "/mock/themes"
 		self.valid_theme_content = {
 			"primaryColor"       : "#ffd740",
@@ -48,7 +48,7 @@ class TestThemeManager(unittest.TestCase):
 			"secondaryTextColor" : "#ffffff",
 		}
 
-	def test_set_theme_dir(self, mock_validate_dir_path):
+	def test_set_theme_dir(self, _):
 		"""Test setting a valid theme directory."""
 		theme_manager = ThemeManager(self.mock_theme_dir)
 
@@ -59,7 +59,7 @@ class TestThemeManager(unittest.TestCase):
 	@patch("qt_stylehelper._theme.Path.iterdir", return_value=[
 		Path("theme1.json"), Path("theme2.json"), Path("not_a_theme.txt")
 	])
-	def test_get_theme_list(self, mock_iterdir, mock_validate_dir_path):
+	def test_get_theme_list(self, mock_iterdir, _):
 		"""Test retrieving the list of available themes."""
 		theme_manager = ThemeManager(self.mock_theme_dir)
 		themes = theme_manager.get_theme_list()
@@ -67,7 +67,7 @@ class TestThemeManager(unittest.TestCase):
 		mock_iterdir.assert_called_once()
 
 	@patch("qt_stylehelper._theme.Path.iterdir", return_value=[])
-	def test_get_theme_list_no_json(self, mock_iterdir, mock_validate_dir_path):
+	def test_get_theme_list_no_json(self, mock_iterdir, _):
 		"""Test retrieving themes when no .json files exist."""
 		theme_manager = ThemeManager(self.mock_theme_dir)
 		themes = theme_manager.get_theme_list()
@@ -76,7 +76,7 @@ class TestThemeManager(unittest.TestCase):
 
 	@patch("qt_stylehelper._theme.Path.exists", return_value=True)
 	@patch("qt_stylehelper._theme.Path.open", new_callable=MagicMock)
-	def test_load_theme_valid(self, mock_open, mock_exists, mock_validate_dir_path):
+	def test_load_theme_valid(self, mock_open, mock_exists, _):
 		"""Test loading a valid theme."""
 		theme_manager = ThemeManager(self.mock_theme_dir)
 		mock_open.return_value.__enter__.return_value.read.return_value = json.dumps(self.valid_theme_content)
@@ -87,7 +87,7 @@ class TestThemeManager(unittest.TestCase):
 		mock_open.assert_called_once()
 
 	@patch("qt_stylehelper._theme.Path.exists", return_value=False)
-	def test_load_theme_not_found(self, mock_exists, mock_validate_dir_path):
+	def test_load_theme_not_found(self, mock_exists, _):
 		"""Test loading a theme that does not exist."""
 		theme_manager = ThemeManager(self.mock_theme_dir)
 		theme = theme_manager.load_theme("missing_theme")
@@ -96,7 +96,7 @@ class TestThemeManager(unittest.TestCase):
 
 	@patch("qt_stylehelper._theme.Path.exists", return_value=True)
 	@patch("qt_stylehelper._theme.Path.open", side_effect=Exception("Invalid JSON"))
-	def test_load_theme_invalid_json(self, mock_open, mock_exists, mock_validate_dir_path):
+	def test_load_theme_invalid_json(self, mock_open, mock_exists, _):
 		"""Test loading a theme with invalid JSON."""
 		theme_manager = ThemeManager(self.mock_theme_dir)
 		with self.assertLogs(level=logging.ERROR) as log:
@@ -106,7 +106,7 @@ class TestThemeManager(unittest.TestCase):
 		mock_exists.assert_called_once()
 		mock_open.assert_called_once()
 
-	def test_convert_theme_dir_to_path(self, mock_validate_dir_path):
+	def test_convert_theme_dir_to_path(self, _):
 		"""Test converting theme directory to a Path."""
 		theme_manager = ThemeManager(self.mock_theme_dir)
 		with patch("qt_stylehelper._theme.Path.is_dir", return_value=True):

@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, patch
 
 import jinja2
 
-from qt_stylehelper._stylesheet import ExtraAttributes, StyleSheetRenderer, Theme
+from qt_stylehelper import ExtraAttributes, StyleSheetRenderer, Theme
 
 
 class TestStyleSheetRenderer(unittest.TestCase):
@@ -46,12 +46,14 @@ class TestStyleSheetRenderer(unittest.TestCase):
 	def test_render_invalid_theme(self, mock_get_template):
 		renderer = StyleSheetRenderer()
 		with self.assertRaises(ValueError):
+			# noinspection PyTypeChecker
 			renderer.render(None, self.extra)
 
 	@patch("qt_stylehelper._stylesheet.jinja2.Environment.get_template")
 	def test_render_invalid_extra(self, mock_get_template):
 		renderer = StyleSheetRenderer()
 		with self.assertRaises(ValueError):
+			# noinspection PyTypeChecker
 			renderer.render(self.theme, None)
 
 	@patch("qt_stylehelper._stylesheet.jinja2.Environment.get_template")

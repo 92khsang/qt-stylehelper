@@ -1,11 +1,15 @@
 import sys
 from abc import ABCMeta
 from functools import wraps
+from typing import Callable, ParamSpec, TypeVar
 
 from .errors import QtDependencyError
 
+T = TypeVar("T")
+P = ParamSpec("P")
 
-def require_qt(func):
+
+def require_qt(func: Callable[P, T]) -> Callable[P, T]:
     """
     Decorator that ensures the decorated function is only executed if a QT module
     is available in the system. Specifically checks for the presence of "PySide6"
@@ -13,7 +17,7 @@ def require_qt(func):
     with a message indicating the need to install PySide6.
     """
     @wraps(func)
-    def wrapper(*args, **kwargs):
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
         if any(module in sys.modules for module in ["PySide6"]):
             return func(*args, **kwargs)
         else:
@@ -26,7 +30,7 @@ def require_qt_for_all_methods(cls):
     """
     Class decorator that applies the `require_qt` decorator to all methods
     of the class, ensuring they are only executed if a QT module is available.
-    
+
     It wraps static methods, class methods, and callable instance methods
     with the `require_qt` decorator. Methods starting with double underscores
     are ignored.
@@ -37,20 +41,21 @@ def require_qt_for_all_methods(cls):
     Returns:
         The class with all applicable methods wrapped with the `require_qt` decorator.
     """
-    for attr_name, attr_value in list(cls.__dict__.items()):
-        if isinstance(attr_value, staticmethod):
-            original_func = attr_value.__func__
-            wrapped = staticmethod(require_qt(original_func))
-            setattr(cls, attr_name, wrapped)
-        elif isinstance(attr_value, classmethod):
-            original_func = attr_value.__func__
-            wrapped = classmethod(require_qt(original_func))
-            setattr(cls, attr_name, wrapped)
-        elif not attr_name.startswith("__") and hasattr(attr_value, "__call__"):
-            wrapped = require_qt(attr_value)
-            setattr(cls, attr_name, wrapped)
+    for base_cls in cls.__mro__:
+        for attr_name, attr_value in base_cls.__dict__.items():
+            if isinstance(attr_value, staticmethod):
+                original_func = attr_value.__func__
+                wrapped = staticmethod(require_qt(original_func))
+                setattr(cls, attr_name, wrapped)
+            elif isinstance(attr_value, classmethod):
+                original_func = attr_value.__func__
+                wrapped = classmethod(require_qt(original_func))
+                setattr(cls, attr_name, wrapped)
+            elif not attr_name.startswith("__") and callable(attr_value):
+                wrapped = require_qt(attr_value)
+                setattr(cls, attr_name, wrapped)
 
-    return cls
+        return cls
 
 
 def require_init(func):

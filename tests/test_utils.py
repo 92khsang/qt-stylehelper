@@ -2,8 +2,11 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from qt_stylehelper._utils import (
-	get_platform_resource_dir_path, is_valid_6_digit_hex_color, is_valid_filename, validate_dir_path,
+from qt_stylehelper import (
+	get_platform_resource_dir_path,
+	is_valid_6_digit_hex_color,
+	is_valid_filename,
+	validate_dir_path,
 )
 
 

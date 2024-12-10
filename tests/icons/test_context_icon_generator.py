@@ -8,7 +8,7 @@ from qt_stylehelper.icon import ContextIconGenerator
 class TestContextIconGenerator(unittest.TestCase):
 
 	def setUp(self):
-		"""Setup the ContextIconGenerator instance and test variables."""
+		"""Set up the ContextIconGenerator instance and test variables."""
 		self.generator = ContextIconGenerator("#0000ff", "#ff0000")
 		self.theme = MagicMock()
 		self.theme.colors = {

@@ -3,7 +3,12 @@ import unittest
 from unittest.mock import MagicMock, patch
 
 from qt_stylehelper.class_helpers import (
-	RequireInitMeta, override, require_init, require_init_for_all_methods, require_qt, require_qt_for_all_methods,
+	RequireInitMeta,
+	override,
+	require_init,
+	require_init_for_all_methods,
+	require_qt,
+	require_qt_for_all_methods,
 )
 from qt_stylehelper.errors import QtDependencyError
 
@@ -116,11 +121,12 @@ class RequireQtForAllMethodsTest(unittest.TestCase):
 	def test_instance_method_without_qt_installed(self):
 		"""Test instance method when PySide6 is not installed"""
 		obj = RequireQtForAllMethodsTest.TestClass()
-		with self.assertRaises(QtDependencyError) as context:
-			obj.instance_method()
-		self.assertEqual(
-			str(context.exception), "A QT module is required. Please install PySide6."
-		)
+		with patch("sys.modules", {}):
+			with self.assertRaises(QtDependencyError) as context:
+				obj.instance_method()
+			self.assertEqual(
+				str(context.exception), "A QT module is required. Please install PySide6."
+			)
 
 	def test_static_method_with_qt_installed(self):
 		"""Test static method when PySide6 is installed"""
