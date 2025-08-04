@@ -2,8 +2,8 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from qt_stylehelper.value_object import Theme
 from qt_stylehelper.icon import BuiltInIconGenerator
+from qt_stylehelper.value_object import Theme
 
 
 class TestBuiltInIconGenerator(unittest.TestCase):

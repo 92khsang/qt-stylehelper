@@ -12,6 +12,7 @@ def require_qt(func):
     in the loaded modules. If the module is not found, raises a QtDependencyError
     with a message indicating the need to install PySide6.
     """
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         if any(module in sys.modules for module in ["PySide6"]):
@@ -26,7 +27,7 @@ def require_qt_for_all_methods(cls):
     """
     Class decorator that applies the `require_qt` decorator to all methods
     of the class, ensuring they are only executed if a QT module is available.
-    
+
     It wraps static methods, class methods, and callable instance methods
     with the `require_qt` decorator. Methods starting with double underscores
     are ignored.
@@ -70,6 +71,7 @@ def require_init(func):
             instance being initialized.
 
     """
+
     @wraps(func)
     def wrapper(self, *args, **kwargs):
         if not hasattr(self, "_init") or not self._init:
@@ -96,7 +98,9 @@ def require_init_for_all_methods(cls):
     """
     for base_cls in cls.__mro__:
         for attr_name, attr_value in base_cls.__dict__.items():
-            if attr_name.startswith("__") or isinstance(attr_value, (staticmethod, classmethod)):
+            if attr_name.startswith("__") or isinstance(
+                attr_value, (staticmethod, classmethod)
+            ):
                 continue
 
             if callable(attr_value):
@@ -119,6 +123,7 @@ def override(func):
         AttributeError: If the decorated method does not override a base class method.
 
     """
+
     @wraps(func)
     def wrapper(self, *args, **kwargs):
         if not any(hasattr(base, func.__name__) for base in self.__class__.__bases__):
@@ -136,9 +141,7 @@ class RequireInitMeta(ABCMeta):
             if (
                 callable(attr_value)
                 and not attr_name.startswith("__")
-                and not isinstance(
-                    attr_value, (staticmethod, classmethod)
-                ) 
+                and not isinstance(attr_value, (staticmethod, classmethod))
             ):
                 dct[attr_name] = require_init(attr_value)
         return super().__new__(cls, name, bases, dct)

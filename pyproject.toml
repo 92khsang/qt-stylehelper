@@ -41,3 +41,6 @@ include = [
     { path = "qt_stylehelper/themes/*.json", format = ["sdist", "wheel"] },
     { path = "qt_stylehelper/resources/**/*.svg", format = ["sdist", "wheel"] }
 ]
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2"

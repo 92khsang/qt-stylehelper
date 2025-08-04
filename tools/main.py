@@ -1,8 +1,7 @@
 from pathlib import Path
 
-from qt_stylehelper.value_object import Theme
-
 from qt_stylehelper import StaticBuiltInResourceGenerator
+from qt_stylehelper.value_object import Theme
 
 StaticBuiltInResourceGenerator.generate(
 	"dark_amber",

@@ -3,8 +3,8 @@ import logging
 from pathlib import Path
 from typing import List, Optional, Union
 
-from .value_object import Theme
 from ._utils import validate_dir_path
+from .value_object import Theme
 
 
 class ThemeManager:
@@ -24,10 +24,10 @@ class ThemeManager:
         Loads a color theme from a file in the theme directory.
 
         Args:
-			theme_name (str): Name of the theme without the .json extension.
+                        theme_name (str): Name of the theme without the .json extension.
 
         Returns:
-			Theme: Theme object with the loaded color theme, or None if the theme file does not exist or could not be loaded.
+                        Theme: Theme object with the loaded color theme, or None if the theme file does not exist or could not be loaded.
         """
 
         theme_file_name = (

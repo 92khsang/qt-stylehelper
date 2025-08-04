@@ -1,10 +1,10 @@
-import re
-import sys
 import json
 import logging
-from pathlib import Path
+import re
+import sys
 from abc import ABCMeta, abstractmethod
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Dict, List, Optional, Union
 
 if "PySide6" in sys.modules:
@@ -46,7 +46,7 @@ class StaticBuiltInResourceGenerator:
 
         Args:
             theme_name (str): The name of the theme to generate resources for.
-            extra (Optional[Dict[str, Union[str, Dict[str, str], None]]]): 
+            extra (Optional[Dict[str, Union[str, Dict[str, str], None]]]):
                 Additional attributes to customize the theme. Defaults to an empty dictionary.
             destination_dir (Optional[str]): Directory to save the generated resources.
                 If None, a default directory will be used.
@@ -402,11 +402,10 @@ class StaticQtStyleTools(QtStyleTools):
             logging.debug(f"File '{qss_file}' does not exist or is not a file.")
             return False
         try:
-            with qss_file.open(
-                "r", encoding="utf-8"
-            ) as qss_file, DEFAULT_TEMPLATE_FILE.open(
-                "r", encoding="utf-8"
-            ) as jinja_template:
+            with (
+                qss_file.open("r", encoding="utf-8") as qss_file,
+                DEFAULT_TEMPLATE_FILE.open("r", encoding="utf-8") as jinja_template,
+            ):
                 # Top 4 lines are copy-right comments
                 qss_top_4_lines = [
                     line.strip() for line in [next(qss_file, "") for _ in range(4)]
@@ -628,7 +627,7 @@ class DynamicQtStyleTools(QtStyleTools):
         Sets extra attributes for the style tools.
 
         Args:
-            extra (Optional[Dict[str, Union[str, Dict[str, str], None]]]): 
+            extra (Optional[Dict[str, Union[str, Dict[str, str], None]]]):
                 A dictionary of extra attributes to update. If None, an empty
                 dictionary is used.
 

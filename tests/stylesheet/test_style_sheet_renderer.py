@@ -3,7 +3,8 @@ from unittest.mock import MagicMock, patch
 
 import jinja2
 
-from qt_stylehelper._stylesheet import ExtraAttributes, StyleSheetRenderer, Theme
+from qt_stylehelper._stylesheet import ExtraAttributes, StyleSheetRenderer, \
+    Theme
 
 
 class TestStyleSheetRenderer(unittest.TestCase):

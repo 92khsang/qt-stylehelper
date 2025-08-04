@@ -15,7 +15,7 @@ dynamic_style_tools.apply_stylesheet(window, "light_cyan_500")
 # run
 window.show()
 
-if hasattr(app, 'exec'):
-	app.exec()
+if hasattr(app, "exec"):
+    app.exec()
 else:
-	app.exec_()
+    app.exec_()

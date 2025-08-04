@@ -1,10 +1,11 @@
-import re
 import logging
+import re
 from pathlib import Path
 from typing import Final, List, Optional
 
+from ._utils import get_platform_resource_dir_path, is_valid_filename, \
+    validate_dir_path
 from .value_object import Theme
-from ._utils import get_platform_resource_dir_path, is_valid_filename, validate_dir_path
 
 ICON_CONTEXT: Final[List[str]] = ["disabled", "primary", "active"]
 
@@ -147,7 +148,6 @@ class BuiltInIconGenerator:
         theme: Theme,
         destination_dir: str,
     ) -> None:
-
         """
         Generates icons statically for a specified theme.
 
@@ -214,7 +214,7 @@ class ContextIconGenerator:
         Raises:
             ValueError: If the specified theme is not found.
         """
-        
+
         if source_dir is None or destination_dir is None:
             raise ValueError("Both source_dir and destination_dir must be provided.")
 

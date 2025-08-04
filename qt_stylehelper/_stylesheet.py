@@ -1,6 +1,6 @@
-import sys
 import logging
 import platform
+import sys
 from pathlib import Path
 from typing import Final, List, Optional
 

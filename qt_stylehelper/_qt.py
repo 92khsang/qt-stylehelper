@@ -1,9 +1,9 @@
-import sys
 import logging
+import sys
 from pathlib import Path
 
-from ._theme import Theme
 from ._stylesheet import ICON_PREFIX
+from ._theme import Theme
 from .class_helpers import require_qt, require_qt_for_all_methods
 
 if "PySide6" in sys.modules:
