@@ -15,6 +15,7 @@ setup(
 	version='0.1',
 	packages=[
 		'qt_stylehelper',
+		'qt_stylehelper.themes',
 		'qt_stylehelper.resources',
 		'qt_stylehelper.resources.icons',
 	],
