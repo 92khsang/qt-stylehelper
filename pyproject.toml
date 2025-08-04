@@ -1,0 +1,43 @@
+[project]
+name = "qt-stylehelper"
+version = "0.1.0"
+description = "Designed to simplify Qt design in Python3. Inspired by qt‑material"
+readme = "README.md"
+requires-python = "<3.14,>=3.12"
+license = { text = "BSD-2-Clause" }
+
+authors = [
+    { name = "Hayes Kwon", email = "92khsang@gmail.com" }
+]
+maintainers = [
+    { name = "Hayes Kwon", email = "92khsang@gmail.com" }
+]
+
+dependencies = [
+    "Jinja2~=3.1.4",
+    "PySide6~=6.8.1"
+]
+
+classifiers = [
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python :: 3.12"
+]
+
+[project.urls]
+Homepage = "https://github.com/92khsang/qt-stylehelper"
+Repository = "https://github.com/92khsang/qt-stylehelper"
+
+[build-system]
+requires = ["poetry-core>=2.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+packages = [
+    { include = "qt_stylehelper" }
+]
+
+include = [
+    { path = "qt_stylehelper/**/*.jinja2", format = ["sdist", "wheel"] },
+    { path = "qt_stylehelper/themes/*.json", format = ["sdist", "wheel"] },
+    { path = "qt_stylehelper/resources/**/*.svg", format = ["sdist", "wheel"] }
+]

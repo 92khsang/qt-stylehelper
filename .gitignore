@@ -146,3 +146,4 @@ tools/resources/**
 
 # examples
 examples/static_theme_convert/resources/**
+poetry.lock
