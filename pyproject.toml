@@ -1,9 +1,13 @@
+[build-system]
+requires = ["poetry-core>=2.0.0"]
+build-backend = "poetry.core.masonry.api"
+
 [project]
 name = "qt-stylehelper"
-version = "0.1.0"
+version = "0.2.0"
 description = "Designed to simplify Qt design in Python3. Inspired by qt‑material"
 readme = "README.md"
-requires-python = "<3.14,>=3.12"
+requires-python = ">=3.12,<3.14"
 license = { text = "BSD-2-Clause" }
 
 authors = [
@@ -15,7 +19,7 @@ maintainers = [
 
 dependencies = [
     "Jinja2~=3.1.4",
-    "PySide6~=6.8.1"
+    "PySide6~=6.9.1"
 ]
 
 classifiers = [
@@ -23,24 +27,25 @@ classifiers = [
     "Programming Language :: Python :: 3.12"
 ]
 
-[project.urls]
-Homepage = "https://github.com/92khsang/qt-stylehelper"
-Repository = "https://github.com/92khsang/qt-stylehelper"
-
-[build-system]
-requires = ["poetry-core>=2.0.0"]
-build-backend = "poetry.core.masonry.api"
-
 [tool.poetry]
 packages = [
-    { include = "qt_stylehelper" }
+    { include = "qt_stylehelper", from = "." }
 ]
 
 include = [
-    { path = "qt_stylehelper/**/*.jinja2", format = ["sdist", "wheel"] },
-    { path = "qt_stylehelper/themes/*.json", format = ["sdist", "wheel"] },
-    { path = "qt_stylehelper/resources/**/*.svg", format = ["sdist", "wheel"] }
+    { path = "qt_stylehelper/resources/", format = ["sdist", "wheel"] }
 ]
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.2"
+pytest = "^8.4.1"
+pytest-cov = "^6.2.1"
+pytest-qt = "^4.5.0"
+black = "^25.1.0"
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+
+[project.urls]
+Homepage = "https://github.com/92khsang/qt-stylehelper"
+Repository = "https://github.com/92khsang/qt-stylehelper"

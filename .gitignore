@@ -135,15 +135,15 @@ storage_data/
 *.iml
 *.code-workspace
 
-# ui
-*.ui
-
 # inner data
 .data/**
 
 # tools
 tools/resources/**
 
-# examples
-examples/static_theme_convert/resources/**
+# poetry
 poetry.lock
+
+# examples
+examples/resources/**
+/examples/my_theme.json
